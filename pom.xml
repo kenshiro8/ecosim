@@ -1,0 +1,57 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.example.ecosim</groupId>
+  <artifactId>ecosim</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+  <name>ecosim</name>
+
+  <!-- Java と JavaFX のバージョンをプロパティで管理 -->
+  <properties>
+    <java.version>17</java.version>
+    <javafx.version>20</javafx.version>
+  </properties>
+
+  <dependencies>
+    <!-- テスト用 JUnit 依存 -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- JavaFX Controls -->
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-controls</artifactId>
+      <version>${javafx.version}</version>
+    </dependency>
+
+    <!-- JavaFX FXML (必要なら) -->
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-fxml</artifactId>
+      <version>${javafx.version}</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-maven-plugin</artifactId>
+        <version>0.0.8</version>
+        <extensions>true</extensions>
+        <configuration>
+          <mainClass>com.example.ecosim.MainApp</mainClass>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  
+</project>
