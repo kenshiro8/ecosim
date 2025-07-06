@@ -1,4 +1,5 @@
 package com.example.ecosim;
+import javafx.geometry.Point2D;
 
 public class Plant extends AbstractOrganism {
     private double growthRate;
@@ -14,6 +15,8 @@ public class Plant extends AbstractOrganism {
     @Override
     public AbstractOrganism reproduce() {
         // 一定確率で新しい Plant を返す or null
+        return null;
+        // nullでは常に繫殖しない、要変更？
     }
 
     public void photosynthesize() {

@@ -1,4 +1,7 @@
 // Animal (abstract)
+package com.example.ecosim;
+import javafx.geometry.Point2D;
+
 public abstract class Animal extends AbstractOrganism {
     protected int speed;
     public Animal(String id, Point2D pos, double e, int speed) {
