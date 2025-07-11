@@ -1,9 +1,12 @@
 package com.example.ecosim;
 
 import java.util.Map;
-import javafx.animation.*;
-import javafx.util.Duration;
+
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.util.Duration;
 
 
 
