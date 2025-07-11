@@ -1,0 +1,74 @@
+C:.
+|   pom.xml
+|   project_tree.txt
+|   
++---src
+|   +---main
+|   |   +---java
+|   |   |   \---com
+|   |   |       \---example
+|   |   |           \---ecosim
+|   |   |                   AbstractOrganism.java
+|   |   |                   Animal.java
+|   |   |                   App.java
+|   |   |                   Carnivore.java
+|   |   |                   Ecosystem.java
+|   |   |                   Herbivore.java
+|   |   |                   MainApp.java
+|   |   |                   OrganismView.java
+|   |   |                   Plant.java
+|   |   |                   SimulationEngine.java
+|   |   |                   SimulatorGUI.java
+|   |   |                   Typhoon.java
+|   |   |                   
+|   |   \---resources
+|   |       \---ecosim
+|   |           |   style.css
+|   |           |   
+|   |           \---images
+|   |                   Grass.png
+|   |                   Horse.png
+|   |                   Rion.png
+|   |                   
+|   \---test
+|       \---java
+|           \---com
+|               \---example
+|                   \---ecosim
+|                           AppTest.java
+|                           
+\---target
+    +---classes
+    |   +---com
+    |   |   \---example
+    |   |       \---ecosim
+    |   |               AbstractOrganism.class
+    |   |               Animal.class
+    |   |               App.class
+    |   |               Carnivore.class
+    |   |               Ecosystem.class
+    |   |               Herbivore.class
+    |   |               MainApp.class
+    |   |               OrganismView.class
+    |   |               Plant.class
+    |   |               SimulationEngine.class
+    |   |               SimulatorGUI.class
+    |   |               Typhoon.class
+    |   |               
+    |   \---ecosim
+    |       |   style.css
+    |       |   
+    |       \---images
+    |               Grass.png
+    |               Horse.png
+    |               Rion.png
+    |               
+    +---generated-sources
+    |   \---annotations
+    \---maven-status
+        \---maven-compiler-plugin
+            \---compile
+                \---default-compile
+                        createdFiles.lst
+                        inputFiles.lst
+                        

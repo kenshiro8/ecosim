@@ -1,0 +1,15 @@
+.plant {
+  -fx-fill: #a8e6cf;
+  -fx-stroke: #37966f;
+  -fx-stroke-width: 1.5;
+}
+.herbivore {
+  -fx-fill: #ffd3b6;
+  -fx-stroke: #ff8b94;
+  -fx-stroke-width: 1.5;
+}
+.carnivore {
+  -fx-fill: #ff8b94;
+  -fx-stroke: #c94c4c;
+  -fx-stroke-width: 1.5;
+}
