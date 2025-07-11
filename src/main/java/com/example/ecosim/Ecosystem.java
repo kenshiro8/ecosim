@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.Iterator;
 
 public class Ecosystem {
     // 描画領域（SimulatorGUI のサイズに合わせる）
@@ -54,13 +55,17 @@ public class Ecosystem {
         }
     }
 
-    /** 更新メソッドはそのまま */
     public void updateEcosystem() {
-        // move/grow/reproduce のループ（例）
         List<AbstractOrganism> newborns = new ArrayList<>();
-        for (AbstractOrganism o : organisms) {
+        Iterator<AbstractOrganism> it = organisms.iterator();
+        while (it.hasNext()) {
+            AbstractOrganism o = it.next();
             o.move();
             o.grow();
+            if (o.getEnergy() <= 0) {
+                it.remove();       // 死亡
+                continue;
+            }
             AbstractOrganism child = o.reproduce();
             if (child != null) newborns.add(child);
         }

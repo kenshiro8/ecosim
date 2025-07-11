@@ -10,13 +10,20 @@ public class Plant extends AbstractOrganism {
     }
 
     @Override
-    public void move() { /* 植物は移動しない */ }
+    public void move() {
+        double dx = (Math.random() - 0.5) * 2;
+        double dy = (Math.random() - 0.5) * 2;
+        position = position.add(dx, dy);
+    }
 
     @Override
     public AbstractOrganism reproduce() {
-        // 一定確率で新しい Plant を返す or null
+        if (energy > 10 && Math.random() < 0.05) {
+            Plant child = new Plant(id + "-c", position, energy / 2, growthRate);
+            energy /= 2;
+            return child;
+        }
         return null;
-        // nullでは常に繫殖しない、要変更？
     }
 
     public void photosynthesize() {
