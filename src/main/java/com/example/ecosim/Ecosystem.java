@@ -1,12 +1,13 @@
 package com.example.ecosim;
 
-import javafx.geometry.Point2D;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.stream.Collectors;
+
+import javafx.geometry.Point2D;
 
 public class Ecosystem {
     // 描画領域（SimulatorGUI のサイズに合わせる）
@@ -55,6 +56,13 @@ public class Ecosystem {
         }
     }
 
+    public void applyTyphoon(Typhoon typhoon) {
+        for (AbstractOrganism o : organisms) {
+            if (typhoon.hits(o)) {
+                typhoon.applyEffect(o);
+            }
+        }
+    }
     public void updateEcosystem() {
         List<AbstractOrganism> newborns = new ArrayList<>();
         Iterator<AbstractOrganism> it = organisms.iterator();
