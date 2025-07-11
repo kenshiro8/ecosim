@@ -68,4 +68,7 @@ public void runSimulation() {
             avgE);
         timestep++;
     }
+    public Ecosystem getEcosystem() {
+        return ecosystem;
+    }
 }

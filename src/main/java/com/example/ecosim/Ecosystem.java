@@ -16,7 +16,8 @@ public class Ecosystem {
     private final Random random = new Random();
 
     /** デフォルトコンストラクタ */
-    public Ecosystem() {
+    public List<AbstractOrganism> getOrganisms() {
+        return organisms;
     }
 
     /**
