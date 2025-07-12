@@ -1,6 +1,9 @@
 // SimulatorGUI.java
 package com.example.ecosim;
 
+import java.util.*;
+import java.util.Map.Entry;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -9,14 +12,17 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.Node;
+import javafx.scene.effect.ColorAdjust;
 import javafx.stage.Stage;
-import java.util.Map.Entry;
 import javafx.util.Duration;
-import java.util.*;
 import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+
 
 public class SimulatorGUI extends Application {
     private Label stepLabel = new Label("Step: 0");
@@ -97,6 +103,8 @@ public class SimulatorGUI extends Application {
                 ov.updatePositionInstant();
             } else {
                 ov.updatePositionAnimated();
+                //Energy変化時発光
+                ov.updateEnergyIfChanged();
             }
         }
 

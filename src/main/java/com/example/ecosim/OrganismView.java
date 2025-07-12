@@ -1,12 +1,15 @@
 package com.example.ecosim;
 
 import javafx.animation.TranslateTransition;
+import javafx.animation.ScaleTransition;
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.util.Duration;
-import javafx.animation.ScaleTransition;
-import javafx.animation.Interpolator;
+import javafx.scene.effect.ColorAdjust;
 import javafx.util.Duration;
 
 public class OrganismView {
@@ -17,6 +20,7 @@ public class OrganismView {
 
     private final AbstractOrganism model;
     private final ImageView view;
+    private double lastEnergy;
 
     public OrganismView(AbstractOrganism model) {
         this.model = model;
@@ -35,7 +39,7 @@ public class OrganismView {
         view.setFitWidth(24); // 表示サイズを適宜調整
         view.setFitHeight(24);
         view.setMouseTransparent(true); // パン／クリック操作が下に通るように
-
+        lastEnergy = model.getEnergy();
         updatePositionInstant();
     }
 
@@ -91,4 +95,30 @@ public class OrganismView {
 
         st1.play();
     }
+
+    public void playEnergyPulse() {
+        // ColorAdjust で輝度を操作
+        ColorAdjust adjust = new ColorAdjust();
+        view.setEffect(adjust);
+
+        // 0.5→0 の明るさタイムライン
+        Timeline tl = new Timeline(
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(adjust.brightnessProperty(), 0.5)),
+                new KeyFrame(Duration.millis(300),
+                        new KeyValue(adjust.brightnessProperty(), 0)));
+        tl.setCycleCount(1);
+        tl.play();
+    }
+
+    public void updateEnergyIfChanged() {
+        double current = model.getEnergy();
+        // 浮動小数点の厳密比較に不安がある場合は、
+        // Math.abs(current - lastEnergy) > 1e-6 のようにする
+        if (current != lastEnergy) {
+            playEnergyPulse();
+            lastEnergy = current;
+        }
+    }
+
 }
