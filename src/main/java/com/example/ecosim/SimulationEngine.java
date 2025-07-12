@@ -9,20 +9,16 @@ public class SimulationEngine {
     private Map<String, Long> lastCounts;
     private double lastAverageEnergy = 0.0;
 
-    /** 初期個体数を受け取るコンストラクタ */
-    public SimulationEngine(int numPlants,
-            int numHerbivores,
-            int numCarnivores) {
+    /** デフォルトコンストラクタ（初期化は GUI で行う） */
+    public SimulationEngine() {
         this.ecosystem = new Ecosystem();
-        // 初期化ロジックを呼び出し
-        ecosystem.initialize(numPlants, numHerbivores, numCarnivores);
-        // 最初の統計値を作る
-        updateStatistics();
     }
 
-    /** デフォルト呼び出しも用意 */
-    public SimulationEngine() {
-        this(30, 10, 5); // デフォルト：植物30、草食10、肉食5
+    /** 初期個体数を指定して Ecosystem を初期化し、統計をリセット */
+    public void initialize(int numPlants, int numHerbivores, int numCarnivores) {
+        ecosystem.initialize(numPlants, numHerbivores, numCarnivores);
+        stepCount = 0;
+        updateStatistics();
     }
 
     public void setGui(SimulatorGUI gui) {

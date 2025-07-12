@@ -10,24 +10,42 @@ import java.util.stream.Collectors;
 import javafx.geometry.Point2D;
 
 public class Ecosystem {
+    /** 画面サイズのデフォルト値／GUIからの更新結果を保持するstaticフィールド */
+    public static double WIDTH = 400;
+    public static double HEIGHT = 200;
+
     // 描画領域（SimulatorGUI のサイズに合わせる）
-    public static final double WIDTH  = 400;
-    public static final double HEIGHT = 200;
+    private double width = WIDTH;
+    private double height = HEIGHT;
 
     private final List<AbstractOrganism> organisms = new ArrayList<>();
     private final Random random = new Random();
 
-    /** デフォルトコンストラクタ */
+    public Ecosystem() {
+        // organisms, random はフィールド初期化子で生成済み
+    }
+
+    /** GUI から呼ばれる：描画領域サイズを更新 */
+    public void setBounds(double width, double height) {
+        this.width = width;
+        this.height = height;
+        WIDTH = width;
+        HEIGHT = height;
+    }
+
+    // 現在の個体リストを返す
     public List<AbstractOrganism> getOrganisms() {
         return organisms;
     }
 
     /**
      * 初期個体を生成してリストに追加する
+     * 
      * @param numPlants     植物の初期個体数
      * @param numHerbivores 草食動物の初期個体数
      * @param numCarnivores 肉食動物の初期個体数
      */
+
     public void initialize(int numPlants, int numHerbivores, int numCarnivores) {
         // 植物を生成
         for (int i = 0; i < numPlants; i++) {
@@ -63,6 +81,7 @@ public class Ecosystem {
             }
         }
     }
+
     public void updateEcosystem() {
         List<AbstractOrganism> newborns = new ArrayList<>();
         Iterator<AbstractOrganism> it = organisms.iterator();
@@ -71,11 +90,12 @@ public class Ecosystem {
             o.move();
             o.grow();
             if (o.getEnergy() <= 0) {
-                it.remove();       // 死亡
+                it.remove(); // 死亡
                 continue;
             }
             AbstractOrganism child = o.reproduce();
-            if (child != null) newborns.add(child);
+            if (child != null)
+                newborns.add(child);
         }
         organisms.addAll(newborns);
     }
@@ -83,20 +103,21 @@ public class Ecosystem {
     /** 種類ごとの個体数を返す */
     public Map<String, Long> countByType() {
         return organisms.stream()
-            .collect(Collectors.groupingBy(o -> o.getClass().getSimpleName(),
-            Collectors.counting()));
+                .collect(Collectors.groupingBy(o -> o.getClass().getSimpleName(),
+                        Collectors.counting()));
     }
 
     /** 平均エネルギーを返す */
     public double averageEnergy() {
         return organisms.stream()
-            .mapToDouble(AbstractOrganism::getEnergy)
-            .average().orElse(0.0);
+                .mapToDouble(AbstractOrganism::getEnergy)
+                .average().orElse(0.0);
     }
 
     /** ランダムな画面内ポジションを生成 */
     private Point2D randomPosition() {
-        return new Point2D(random.nextDouble() * WIDTH,
-                           random.nextDouble() * HEIGHT);
+        return new Point2D(
+                random.nextDouble() * width,
+                random.nextDouble() * height);
     }
 }
