@@ -7,7 +7,7 @@ public abstract class Animal extends AbstractOrganism {
     protected int speed;
     protected double metabolism;
 
-    public Animal(String id, Point2D pos, double e, int speed, double matabolism) {
+    public Animal(String id, Point2D pos, double e, int speed, double metabolism) {
         super(id, pos, e);
         this.speed = speed;
         this.metabolism = metabolism;
