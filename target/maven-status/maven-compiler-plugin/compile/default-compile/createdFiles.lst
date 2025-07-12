@@ -1,4 +1,5 @@
 com\example\ecosim\AbstractOrganism.class
+com\example\ecosim\SimulatorGUI$1.class
 com\example\ecosim\Herbivore.class
 com\example\ecosim\Plant.class
 com\example\ecosim\Animal.class

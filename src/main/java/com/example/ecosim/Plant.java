@@ -11,9 +11,7 @@ public class Plant extends AbstractOrganism {
 
     @Override
     public void move() {
-        double dx = (Math.random() - 0.5) * 2;
-        double dy = (Math.random() - 0.5) * 2;
-        position = position.add(dx, dy);
+        //植物は動かんよ
     }
 
     @Override

@@ -2,75 +2,66 @@ package com.example.ecosim;
 
 import java.util.Map;
 
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.application.Platform;
-import javafx.util.Duration;
-
-
-
 public class SimulationEngine {
     private final Ecosystem ecosystem;
-    private SimulatorGUI gui; 
-    private int timestep = 0;
+    private SimulatorGUI gui;
+    private int stepCount = 0;
+    private Map<String, Long> lastCounts;
+    private double lastAverageEnergy = 0.0;
 
     /** 初期個体数を受け取るコンストラクタ */
     public SimulationEngine(int numPlants,
-                            int numHerbivores,
-                            int numCarnivores) {
+            int numHerbivores,
+            int numCarnivores) {
         this.ecosystem = new Ecosystem();
         // 初期化ロジックを呼び出し
         ecosystem.initialize(numPlants, numHerbivores, numCarnivores);
+        // 最初の統計値を作る
+        updateStatistics();
     }
 
     /** デフォルト呼び出しも用意 */
     public SimulationEngine() {
-        this(30, 10, 5);  // デフォルト：植物30、草食10、肉食5
+        this(30, 10, 5); // デフォルト：植物30、草食10、肉食5
     }
 
     public void setGui(SimulatorGUI gui) {
         this.gui = gui;
     }
 
-public void runSimulation() {
-        Timeline loop = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
-            ecosystem.updateEcosystem();
-            Map<String, Long> counts = ecosystem.countByType();
-            double avgE = ecosystem.averageEnergy();
-
-            // コンソール出力
-            System.out.printf("Step %d | Plants:%d | Herb:%d | Carn:%d | AvgE:%.2f%n",
-               timestep,
-               counts.getOrDefault("Plant", 0L),
-               counts.getOrDefault("Herbivore", 0L),
-               counts.getOrDefault("Carnivore", 0L),
-               avgE);
-
-            // GUI 更新（UI スレッド上で安全に呼び出し）
-            if (gui != null) {
-                Platform.runLater(() -> 
-                    gui.updateDisplay(timestep, counts, avgE)
-                );
-            }
-            timestep++;
-        }));
-        loop.setCycleCount(Animation.INDEFINITE);
-        loop.play();
+    /**
+     * 1ステップだけ進めて統計を更新する
+     */
+    public void step() {
+        ecosystem.updateEcosystem();
+        stepCount++;
+        updateStatistics();
     }
 
-
-    private void printStats() {
-        Map<String, Long> counts = ecosystem.countByType();
-        double avgE = ecosystem.averageEnergy();
-        System.out.printf("Step %d | Plants:%d | Herb:%d | Carn:%d | AvgE:%.2f%n",
-            timestep,
-            counts.getOrDefault("Plant", 0L),
-            counts.getOrDefault("Herbivore", 0L),
-            counts.getOrDefault("Carnivore", 0L),
-            avgE);
-        timestep++;
+    /** 内部で最新の個体数・平均エネルギーを算出して lastCounts/lastAverageEnergy に保持 */
+    private void updateStatistics() {
+        lastCounts = ecosystem.countByType();
+        lastAverageEnergy = ecosystem.averageEnergy();
     }
+
+    /** GUI から呼び出す現在ステップ数 */
+    public int getStepCount() {
+        return stepCount;
+    }
+
+    /** GUI から呼び出す最新の個体数マップ */
+    public Map<String, Long> getCounts() {
+        return lastCounts;
+    }
+
+    /** GUI から呼び出す最新の平均エネルギー */
+    public double getAverageEnergy() {
+        return lastAverageEnergy;
+    }
+
+    /**
+     * GUI層が個体一覧を取得するためのメソッド
+     */
     public Ecosystem getEcosystem() {
         return ecosystem;
     }
