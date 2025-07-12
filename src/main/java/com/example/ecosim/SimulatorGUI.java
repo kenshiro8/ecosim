@@ -37,7 +37,7 @@ public class SimulatorGUI extends Application {
             );
 
         stage.setScene(scene);
-        stage.setTitle("EcoSim デフォルメ版");
+        stage.setTitle("生態系シュミレーター");
         stage.show();
 
         engine = new SimulationEngine(50, 20, 8);

@@ -84,7 +84,7 @@ public class Ecosystem {
     public Map<String, Long> countByType() {
         return organisms.stream()
             .collect(Collectors.groupingBy(o -> o.getClass().getSimpleName(),
-                                           Collectors.counting()));
+            Collectors.counting()));
     }
 
     /** 平均エネルギーを返す */

@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 public class MainApp extends Application {
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setTitle("Eco Simulator");
+        primaryStage.setTitle("生態系シュミレーター");
         primaryStage.setScene(new Scene(new Label("Hello, EcoSim!"), 400, 200));
         primaryStage.show();
     }
