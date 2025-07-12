@@ -82,18 +82,18 @@ public class Ecosystem {
         }
     }
 
-    public void updateEcosystem() {
+    public void updateEcosystem(double dt) {
         List<AbstractOrganism> newborns = new ArrayList<>();
         Iterator<AbstractOrganism> it = organisms.iterator();
         while (it.hasNext()) {
             AbstractOrganism o = it.next();
-            o.move();
-            o.grow();
+            o.move(dt);
+            o.grow(dt);
             if (o.getEnergy() <= 0) {
                 it.remove(); // 死亡
                 continue;
             }
-            AbstractOrganism child = o.reproduce();
+            AbstractOrganism child = o.reproduce(dt);
             if (child != null)
                 newborns.add(child);
         }

@@ -1,4 +1,5 @@
 package com.example.ecosim;
+
 import javafx.geometry.Point2D;
 
 public class Plant extends AbstractOrganism {
@@ -10,13 +11,21 @@ public class Plant extends AbstractOrganism {
     }
 
     @Override
-    public void move() {
-        //植物は動かんよ
+    public void move(double dt) {
+        // 植物は動かんよ
     }
 
     @Override
-    public AbstractOrganism reproduce() {
-        if (energy > 10 && Math.random() < 0.05) {
+    public void grow(double dt) {
+        // 基本の枯死ロジックも残すなら super.grow(dt);
+        energy += growthRate * dt;
+    }
+
+    @Override
+    public AbstractOrganism reproduce(double dt) {
+        // 繁殖確率を秒率にスケーリング
+        double reproRatePerSec = 0.05;
+        if (energy > 10 && Math.random() < reproRatePerSec * dt) {
             Plant child = new Plant(id + "-c", position, energy / 2, growthRate);
             energy /= 2;
             return child;
@@ -24,7 +33,4 @@ public class Plant extends AbstractOrganism {
         return null;
     }
 
-    public void photosynthesize() {
-        energy += growthRate;
-    }
 }

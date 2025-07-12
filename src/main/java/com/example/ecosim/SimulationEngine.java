@@ -8,10 +8,15 @@ public class SimulationEngine {
     private int stepCount = 0;
     private Map<String, Long> lastCounts;
     private double lastAverageEnergy = 0.0;
+    private double simSpeed = 1.0;
 
     /** デフォルトコンストラクタ（初期化は GUI で行う） */
     public SimulationEngine() {
         this.ecosystem = new Ecosystem();
+    }
+
+    public void setSimulationSpeed(double speed) {
+        this.simSpeed = speed;
     }
 
     /** 初期個体数を指定して Ecosystem を初期化し、統計をリセット */
@@ -28,8 +33,9 @@ public class SimulationEngine {
     /**
      * 1ステップだけ進めて統計を更新する
      */
-    public void step() {
-        ecosystem.updateEcosystem();
+    public void step(double dt) {
+        double scaledDt = dt * simSpeed;
+        ecosystem.updateEcosystem(scaledDt);
         stepCount++;
         updateStatistics();
     }

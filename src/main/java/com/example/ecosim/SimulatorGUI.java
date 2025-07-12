@@ -35,7 +35,6 @@ public class SimulatorGUI extends Application {
 
     private AnimationTimer timer;
     private boolean running = false;
-    private long stepIntervalNanos = 50_000_000; // 初期：50ms(20fps)
 
     private Button startBtn;
     private Button stopBtn;
@@ -49,16 +48,17 @@ public class SimulatorGUI extends Application {
         stopBtn = new Button("停止");
         resetBtn = new Button("リセット");
 
-        speedSlider = new Slider(10, 200, 50);
+        speedSlider = new Slider(0.1, 5.0, 1.0);
         speedSlider.setShowTickLabels(true);
         speedSlider.setShowTickMarks(true);
-        speedSlider.setMajorTickUnit(50);
-        speedSlider.setMinorTickCount(4);
-        speedSlider.setPrefWidth(200);
+        speedSlider.setMajorTickUnit(1.0);
+        speedSlider.valueProperty().addListener((obs, oldV, newV) -> {
+            engine.setSimulationSpeed(newV.doubleValue());
+        });
 
         HBox controlBar = new HBox(10,
                 startBtn, stopBtn, resetBtn,
-                new Label("速度(ms)："), speedSlider);
+                new Label("速度(x)："), speedSlider);
         controlBar.setPadding(new Insets(10));
         controlBar.setAlignment(Pos.CENTER);
 
@@ -94,7 +94,10 @@ public class SimulatorGUI extends Application {
         engine = new SimulationEngine();
         engine.setGui(this);
 
-        // 6) bounds 設定 → 初期化 → 初回描画
+        // 6) スライダーに simSpeed リスナーを登録
+        speedSlider.valueProperty().addListener((obs, oldV, newV) -> engine.setSimulationSpeed(newV.doubleValue()));
+
+        // 7) bounds 設定 → 初期化 → 初回描画
         engine.getEcosystem().setBounds(
                 drawPane.getWidth(), drawPane.getHeight());
         engine.initialize(50, 20, 8);
@@ -103,11 +106,7 @@ public class SimulatorGUI extends Application {
                 engine.getCounts(),
                 engine.getAverageEnergy());
 
-        // 7) PaneサイズをEcosystemに反映
-        engine.getEcosystem().setBounds(
-                drawPane.getWidth(),
-                drawPane.getHeight());
-
+        // 8) PaneサイズをEcosystemに反映
         // さらに、リサイズ時も自動で追従させたいならリスナー登録
         drawPane.widthProperty().addListener((o, oldW, newW) -> engine.getEcosystem().setBounds(
                 newW.doubleValue(),
@@ -116,7 +115,7 @@ public class SimulatorGUI extends Application {
                 drawPane.getWidth(),
                 newH.doubleValue()));
 
-        // 8) AnimationTimer の定義
+        // 9) AnimationTimer の定義
         timer = new AnimationTimer() {
             private long last = 0;
 
@@ -126,19 +125,20 @@ public class SimulatorGUI extends Application {
                     last = now;
                     return;
                 }
-                if (now - last >= stepIntervalNanos) {
-                    engine.step();
-                    updateDisplay(
-                            engine.getStepCount(),
-                            engine.getCounts(),
-                            engine.getAverageEnergy());
-                    last = now;
-                }
+                double dt = (now - last) / 1_000_000_000.0;
+                engine.step(dt);
+                updateDisplay(
+                        engine.getStepCount(),
+                        engine.getCounts(),
+                        engine.getAverageEnergy());
+                last = now;
             }
         };
 
-        // 9) ボタン／スライダーイベント登録
-        startBtn.setOnAction(e -> {
+        // 10) ボタン／スライダーイベント登録
+        startBtn.setOnAction(e ->
+
+        {
             if (!running) {
                 timer.start();
                 running = true;
@@ -172,11 +172,8 @@ public class SimulatorGUI extends Application {
                     engine.getCounts(),
                     engine.getAverageEnergy());
         });
-        speedSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
-            stepIntervalNanos = (long) (newVal.doubleValue() * 1_000_000);
-        });
 
-        // 10) シミュレーション自動開始
+        // 11) シミュレーション自動開始
         timer.start();
         running = true;
     }
@@ -217,8 +214,8 @@ public class SimulatorGUI extends Application {
                 ov.updatePositionInstant();
             } else {
                 ov.updatePositionAnimated();
-                //Energy変化時発光
-                //ov.updateEnergyIfChanged();
+                // Energy変化時発光
+                // ov.updateEnergyIfChanged();
             }
         }
     }

@@ -1,14 +1,27 @@
 // Animal (abstract)
 package com.example.ecosim;
+
 import javafx.geometry.Point2D;
 
 public abstract class Animal extends AbstractOrganism {
     protected int speed;
-    public Animal(String id, Point2D pos, double e, int speed) {
+    protected double metabolism;
+
+    public Animal(String id, Point2D pos, double e, int speed, double matabolism) {
         super(id, pos, e);
         this.speed = speed;
+        this.metabolism = metabolism;
     }
-    public abstract void hunt();
-    public void flee() { /* 逃走ロジック */ }
-}
 
+    @Override
+    public void grow(double dt) {
+        // 基礎代謝分 dt 秒だけ消費
+        energy -= metabolism * dt;
+        super.age += dt; // age の扱いを秒数に合わせるなら
+    }
+
+    public abstract void hunt();
+
+    public void flee() {
+        /* 逃走ロジック */ }
+}
