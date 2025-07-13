@@ -1,10 +1,13 @@
+com\example\ecosim\model\NoMovementBehavior.class
 com\example\ecosim\model\SimulationEngine.class
 com\example\ecosim\util\WorldUtil.class
 com\example\ecosim\model\Ecosystem.class
 com\example\ecosim\util\RandomProvider.class
 com\example\ecosim\view\SimulatorGUI$1.class
 com\example\ecosim\model\Herbivore.class
+com\example\ecosim\model\RandomWalkBehavior.class
 com\example\ecosim\view\SimulatorGUI.class
+com\example\ecosim\model\MovementBehavior.class
 com\example\ecosim\model\Plant.class
 com\example\ecosim\view\OrganismView.class
 com\example\ecosim\model\Typhoon.class

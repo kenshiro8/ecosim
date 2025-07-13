@@ -1,6 +1,7 @@
 package com.example.ecosim.model;
 
 import javafx.geometry.Point2D;
+import com.example.ecosim.model.*;
 
 /**
  * すべての生物に共通するフィールドと振る舞いを定義する抽象クラス
@@ -19,6 +20,15 @@ public abstract class AbstractOrganism {
      * @param pos        初期座標
      * @param initEnergy 初期エネルギー
      */
+
+    // --- Behavior 連携用フィールド ---
+    private MovementBehavior movementBehavior;
+
+    /** move() 時に呼ぶ Behavior をセット */
+    public void setMovementBehavior(MovementBehavior mb) {
+        this.movementBehavior = mb;
+    }
+
     public AbstractOrganism(String id, Point2D pos, double initEnergy) {
         this.id = id;
         this.position = pos;
@@ -27,9 +37,14 @@ public abstract class AbstractOrganism {
     }
 
     /**
-     * 個体の移動ロジックをサブクラスで実装
+     * 移動は MovementBehavior に委譲
      */
-    public abstract void move(double dt);
+
+    public final void move(double dt) {
+        if (movementBehavior != null) {
+            this.position = movementBehavior.computeNextPosition(this, dt);
+        }
+    }
 
     /** dt(秒)分だけ年を取り、基礎代謝分エネルギーを減衰させる */
     public void grow(double dt) {

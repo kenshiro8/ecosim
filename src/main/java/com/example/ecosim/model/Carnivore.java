@@ -10,17 +10,7 @@ public class Carnivore extends Animal {
     public Carnivore(String id, Point2D pos, double e, int speed, double huntingSkill) {
         super(id, pos, e, speed, 1.5);
         this.huntingSkill = huntingSkill;
-    }
-
-    @Override
-    public void move(double dt) {
-        // ランダムな方向ベクトル
-        double dx = RandomProvider.get().nextDouble() * 2 - 1;
-        double dy = RandomProvider.get().nextDouble() * 2 - 1;
-        Point2D dir = new Point2D(dx, dy).normalize();
-        // 移動後は画面内にクランプ
-        Point2D next = position.add(dir.multiply(speed * dt));
-        position = WorldUtil.clamp(next, Ecosystem.WIDTH, Ecosystem.HEIGHT);
+        setMovementBehavior(new RandomWalkBehavior(1.0));
     }
 
     @Override

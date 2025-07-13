@@ -8,11 +8,7 @@ public class Plant extends AbstractOrganism {
     public Plant(String id, Point2D pos, double initEnergy, double growthRate) {
         super(id, pos, initEnergy);
         this.growthRate = growthRate;
-    }
-
-    @Override
-    public void move(double dt) {
-        // 植物は動かんよ
+        setMovementBehavior(new NoMovementBehavior());
     }
 
     @Override

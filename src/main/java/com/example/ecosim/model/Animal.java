@@ -13,6 +13,11 @@ public abstract class Animal extends AbstractOrganism {
         this.metabolism = metabolism;
     }
 
+    /** MovementBehavior から呼ばれる speed 取得用 */
+    public int getSpeed() {
+        return speed;
+    }
+
     @Override
     public void grow(double dt) {
         // 基礎代謝分 dt 秒だけ消費
