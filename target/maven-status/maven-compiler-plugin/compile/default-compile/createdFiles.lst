@@ -4,6 +4,7 @@ com\example\ecosim\view\SimulatorGUI$1.class
 com\example\ecosim\model\Environment.class
 com\example\ecosim\view\SimulatorGUI.class
 com\example\ecosim\model\EventManager.class
+com\example\ecosim\model\DroughtEvent.class
 com\example\ecosim\model\Season.class
 com\example\ecosim\view\OrganismView.class
 com\example\ecosim\model\AbstractOrganism.class
@@ -13,6 +14,7 @@ com\example\ecosim\model\EnvironmentManager.class
 com\example\ecosim\model\PopulationManager.class
 com\example\ecosim\util\WorldUtil.class
 com\example\ecosim\model\Ecosystem.class
+com\example\ecosim\model\TyphoonEvent.class
 com\example\ecosim\util\RandomProvider.class
 com\example\ecosim\model\Herbivore.class
 com\example\ecosim\model\RandomWalkBehavior.class

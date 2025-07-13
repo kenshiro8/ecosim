@@ -29,4 +29,9 @@ public class Plant extends AbstractOrganism {
         return null;
     }
 
+    public void applyDrought(double severity) {
+        // 成長率を一時的に下げたり、エネルギーを減少させる
+        energy -= severity * 2.0;
+    }
+
 }

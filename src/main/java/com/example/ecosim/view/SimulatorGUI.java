@@ -7,6 +7,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.geometry.Insets;
+import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.layout.*;
 import javafx.scene.control.*;
@@ -30,6 +31,8 @@ public class SimulatorGUI extends Application {
     private Button stopBtn;
     private Button resetBtn;
     private Slider speedSlider;
+    private Button typhoonBtn;
+    private Button droughtBtn;
 
     @Override
     public void start(Stage stage) {
@@ -37,6 +40,8 @@ public class SimulatorGUI extends Application {
         startBtn = new Button("開始");
         stopBtn = new Button("停止");
         resetBtn = new Button("リセット");
+        typhoonBtn = new Button("台風発生");
+        droughtBtn = new Button("干ばつ発生");
 
         speedSlider = new Slider(0.1, 5.0, 1.0);
         speedSlider.setShowTickLabels(true);
@@ -47,7 +52,7 @@ public class SimulatorGUI extends Application {
         });
 
         HBox controlBar = new HBox(10,
-                startBtn, stopBtn, resetBtn,
+                startBtn, stopBtn, resetBtn, typhoonBtn, droughtBtn,
                 new Label("速度(x)："), speedSlider);
         controlBar.setPadding(new Insets(10));
         controlBar.setAlignment(Pos.CENTER);
@@ -126,9 +131,7 @@ public class SimulatorGUI extends Application {
         };
 
         // 10) ボタン／スライダーイベント登録
-        startBtn.setOnAction(e ->
-
-        {
+        startBtn.setOnAction(e -> {
             if (!running) {
                 timer.start();
                 running = true;
@@ -161,6 +164,20 @@ public class SimulatorGUI extends Application {
                     engine.getStepCount(),
                     engine.getCounts(),
                     engine.getAverageEnergy());
+        });
+        // 台風発生ボタン
+        typhoonBtn.setOnAction(e -> {
+            double cx = drawPane.getWidth() / 2;
+            double cy = drawPane.getHeight() / 2;
+            engine.addEvent(new TyphoonEvent(
+                    new Point2D(cx, cy), // 台風中心
+                    80, // 半径
+                    5.0 // 強さ
+            ));
+        });
+        // 干ばつ発生ボタン
+        droughtBtn.setOnAction(e -> {
+            engine.addEvent(new DroughtEvent(0.3)); // severity=0.3
         });
 
         // 11) シミュレーション自動開始
