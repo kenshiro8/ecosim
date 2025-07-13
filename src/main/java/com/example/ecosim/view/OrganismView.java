@@ -1,11 +1,7 @@
-package com.example.ecosim;
+package com.example.ecosim.view;
 
-import javafx.animation.TranslateTransition;
-import javafx.animation.ScaleTransition;
-import javafx.animation.Interpolator;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
+import com.example.ecosim.model.*;
+import javafx.animation.*;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;

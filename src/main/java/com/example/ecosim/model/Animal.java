@@ -1,5 +1,5 @@
 // Animal (abstract)
-package com.example.ecosim;
+package com.example.ecosim.model;
 
 import javafx.geometry.Point2D;
 

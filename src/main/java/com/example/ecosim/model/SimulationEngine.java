@@ -1,5 +1,6 @@
-package com.example.ecosim;
+package com.example.ecosim.model;
 
+import com.example.ecosim.view.SimulatorGUI;
 import java.util.Map;
 
 public class SimulationEngine {

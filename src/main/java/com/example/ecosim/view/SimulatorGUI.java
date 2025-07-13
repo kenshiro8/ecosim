@@ -1,30 +1,20 @@
-package com.example.ecosim;
+package com.example.ecosim.view;
 
-import java.util.List;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.HashMap;
+import com.example.ecosim.model.*;
 
+import java.util.*;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
-import javafx.scene.layout.HBox;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
-import javafx.animation.AnimationTimer;
+import javafx.scene.layout.*;
+import javafx.scene.control.*;
+import javafx.animation.*;
 import javafx.util.Duration;
 import javafx.scene.Node;
 import javafx.scene.shape.Circle;
 import javafx.scene.paint.Color;
-import javafx.animation.FadeTransition;
-import javafx.animation.TranslateTransition;
-import javafx.animation.Interpolator;
 
 public class SimulatorGUI extends Application {
     private Label stepLabel = new Label("Step: 0");
