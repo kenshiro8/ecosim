@@ -1,10 +1,15 @@
 package com.example.ecosim.model;
 
+import com.example.ecosim.model.*;
 import com.example.ecosim.view.SimulatorGUI;
+
 import java.util.Map;
 
 public class SimulationEngine {
     private final Ecosystem ecosystem;
+    private final EnvironmentManager envMgr;
+    private final EventManager eventMgr;
+    private final PopulationManager popMgr;
     private SimulatorGUI gui;
     private int stepCount = 0;
     private Map<String, Long> lastCounts;
@@ -14,6 +19,9 @@ public class SimulationEngine {
     /** デフォルトコンストラクタ（初期化は GUI で行う） */
     public SimulationEngine() {
         this.ecosystem = new Ecosystem();
+        this.envMgr = new EnvironmentManager(ecosystem.getEnvironment());
+        this.eventMgr = new EventManager();
+        this.popMgr = new PopulationManager();
     }
 
     public void setSimulationSpeed(double speed) {
@@ -35,8 +43,10 @@ public class SimulationEngine {
      * 1ステップだけ進めて統計を更新する
      */
     public void step(double dt) {
-        double scaledDt = dt * simSpeed;
-        ecosystem.updateEcosystem(scaledDt);
+        double sdt = dt * simSpeed;
+        envMgr.update(sdt);
+        eventMgr.applyEvents(ecosystem);
+        popMgr.update(ecosystem, sdt);
         stepCount++;
         updateStatistics();
     }
@@ -68,4 +78,9 @@ public class SimulationEngine {
     public Ecosystem getEcosystem() {
         return ecosystem;
     }
+
+    public void addEvent(EnvironmentalEvent e) {
+        eventMgr.addEvent(e);
+    }
+
 }

@@ -15,10 +15,12 @@ public class Ecosystem {
     private double height = HEIGHT;
 
     private final List<AbstractOrganism> organisms = new ArrayList<>();
+    private Environment environment;
     private final Random random = new Random();
 
     public Ecosystem() {
         // organisms, random はフィールド初期化子で生成済み
+        this.environment = new Environment(20.0, 0.7, Season.SPRING);
     }
 
     /** GUI から呼ばれる：描画領域サイズを更新 */
@@ -116,4 +118,7 @@ public class Ecosystem {
                 random.nextDouble() * width,
                 random.nextDouble() * height);
     }
+    public Environment getEnvironment() {
+    return environment;
+}
 }
