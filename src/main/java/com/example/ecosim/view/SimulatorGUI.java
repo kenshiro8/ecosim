@@ -6,9 +6,7 @@ import java.util.*;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
-import javafx.geometry.Insets;
-import javafx.geometry.Point2D;
-import javafx.geometry.Pos;
+import javafx.geometry.*;
 import javafx.scene.layout.*;
 import javafx.scene.control.*;
 import javafx.animation.*;
@@ -20,6 +18,7 @@ import javafx.scene.paint.Color;
 public class SimulatorGUI extends Application {
     private Label stepLabel = new Label("Step: 0");
     private Label statsLabel = new Label("Plants:0 Herb:0 Carn:0 AvgE:0.0");
+    private Label envLabel = new Label("Season: SPRING  Temp:20.0℃  Hum:0.70");
     private Pane drawPane;
     private SimulationEngine engine;
     private Map<AbstractOrganism, OrganismView> viewMap = new HashMap<>();
@@ -61,7 +60,7 @@ public class SimulatorGUI extends Application {
         drawPane = new Pane();
         drawPane.setPrefSize(Ecosystem.WIDTH, Ecosystem.HEIGHT);
 
-        VBox infoBox = new VBox(5, stepLabel, statsLabel);
+        VBox infoBox = new VBox(5, stepLabel, statsLabel, envLabel);
         infoBox.setPadding(new Insets(10));
 
         BorderPane root = new BorderPane();
@@ -186,6 +185,12 @@ public class SimulatorGUI extends Application {
     }
 
     public void updateDisplay(int step, Map<String, Long> counts, double avgE) {
+        // 0) 環境情報を取得してラベル更新 ← 追加
+        Environment env = engine.getEcosystem().getEnvironment();
+        envLabel.setText(String.format(
+                "Season: %s  Temp: %.1f℃  Hum: %.2f",
+                env.getSeason(), env.getTemperature(), env.getHumidity()));
+
         // 1) ラベル更新
         stepLabel.setText("Step: " + step);
         statsLabel.setText(String.format(
