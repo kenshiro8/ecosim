@@ -1,7 +1,6 @@
 package com.example.ecosim.model;
 
 import javafx.geometry.Point2D;
-import com.example.ecosim.model.*;
 
 /**
  * すべての生物に共通するフィールドと振る舞いを定義する抽象クラス

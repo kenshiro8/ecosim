@@ -21,7 +21,7 @@ public class Plant extends AbstractOrganism {
     public AbstractOrganism reproduce(double dt) {
         // 繁殖確率を秒率にスケーリング
         double reproRatePerSec = 0.05;
-        if (energy > 10 && Math.random() < reproRatePerSec * dt) {
+        if (energy > 8 && Math.random() < reproRatePerSec * dt) {
             Plant child = new Plant(id + "-c", position, energy / 2, growthRate);
             energy /= 2;
             return child;

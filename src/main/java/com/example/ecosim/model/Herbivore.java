@@ -1,6 +1,9 @@
 package com.example.ecosim.model;
 
-import com.example.ecosim.util.*;
+import java.util.Iterator;
+import java.util.List;
+
+import com.example.ecosim.util.RandomProvider;
 
 import javafx.geometry.Point2D;
 
@@ -21,13 +24,35 @@ public class Herbivore extends Animal {
 
     @Override
     public AbstractOrganism reproduce(double dt) {
-        double reproRatePerSec = 0.05;
-        if (energy > stomachCapacity * 2
+        double reproRatePerSec = 0.5;
+        if (energy > stomachCapacity * 1.2
                 && RandomProvider.get().nextDouble() < reproRatePerSec * dt) {
             Herbivore child = new Herbivore(id + "-c", position, energy / 2, speed, stomachCapacity);
-            energy /= 2;
+            energy /= 1.5;
             return child;
         }
         return null;
     }
+
+    
+    public void eat(List<AbstractOrganism> organisms) {
+        if (organisms == null) return;
+
+        double eatRange = 50.0;
+        double energyGainPerPlant = 20.0;
+
+        Iterator<AbstractOrganism> it = organisms.iterator();
+        while (it.hasNext()) {
+            AbstractOrganism o = it.next();
+            if (o instanceof Plant) {
+                double dist = o.getPosition().distance(this.getPosition());
+                if (dist <= eatRange) {
+                    this.energy = Math.min(this.energy + energyGainPerPlant, stomachCapacity);
+                    it.remove();
+                    break;
+                }
+            }
+        }
+    }
+    
 }

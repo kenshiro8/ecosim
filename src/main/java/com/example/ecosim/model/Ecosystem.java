@@ -1,6 +1,10 @@
 package com.example.ecosim.model;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import javafx.geometry.Point2D;
@@ -56,7 +60,7 @@ public class Ecosystem {
         // 草食動物を生成
         for (int i = 0; i < numHerbivores; i++) {
             Point2D pos = randomPosition();
-            double initEnergy = 10.0 + random.nextDouble() * 10.0;
+            double initEnergy = 100.0 + random.nextDouble() * 10.0;
             int speed = 1 + random.nextInt(3);
             double stomachCap = 5.0 + random.nextDouble() * 5.0;
             organisms.add(new Herbivore("H" + i, pos, initEnergy, speed, stomachCap));
@@ -65,7 +69,7 @@ public class Ecosystem {
         // 肉食動物を生成
         for (int i = 0; i < numCarnivores; i++) {
             Point2D pos = randomPosition();
-            double initEnergy = 15.0 + random.nextDouble() * 10.0;
+            double initEnergy = 150.0 + random.nextDouble() * 10.0;
             int speed = 2 + random.nextInt(3);
             double huntingSkill = 0.3 + random.nextDouble() * 0.7;
             organisms.add(new Carnivore("C" + i, pos, initEnergy, speed, huntingSkill));

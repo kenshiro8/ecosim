@@ -1,6 +1,6 @@
 package com.example.ecosim.model;
 
-import com.example.ecosim.util.*;
+import com.example.ecosim.util.RandomProvider;
 
 import javafx.geometry.Point2D;
 
@@ -15,12 +15,13 @@ public class Carnivore extends Animal {
 
     @Override
     public void hunt() {
-        /* … */ }
+    }
+
 
     @Override
     public AbstractOrganism reproduce(double dt) {
         double reproRatePerSec = huntingSkill * 0.05;
-        if (energy > 20
+        if (energy > 30
                 && RandomProvider.get().nextDouble() < reproRatePerSec * dt) {
             Carnivore child = new Carnivore(id + "-c", position, energy / 2, speed, huntingSkill);
             energy /= 2;

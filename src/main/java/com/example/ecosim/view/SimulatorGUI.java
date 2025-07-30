@@ -1,19 +1,38 @@
 package com.example.ecosim.view;
 
-import com.example.ecosim.model.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
-import java.util.*;
+import com.example.ecosim.model.AbstractOrganism;
+import com.example.ecosim.model.DroughtEvent;
+import com.example.ecosim.model.Ecosystem;
+import com.example.ecosim.model.Environment;
+import com.example.ecosim.model.SimulationEngine;
+import com.example.ecosim.model.TyphoonEvent;
+
+import javafx.animation.AnimationTimer;
+import javafx.animation.FadeTransition;
+import javafx.animation.Interpolator;
+import javafx.animation.TranslateTransition;
 import javafx.application.Application;
-import javafx.stage.Stage;
-import javafx.scene.Scene;
-import javafx.geometry.*;
-import javafx.scene.layout.*;
-import javafx.scene.control.*;
-import javafx.animation.*;
-import javafx.util.Duration;
+import javafx.geometry.Insets;
+import javafx.geometry.Point2D;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.shape.Circle;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class SimulatorGUI extends Application {
     private Label stepLabel = new Label("Step: 0");
@@ -94,7 +113,7 @@ public class SimulatorGUI extends Application {
         // 7) bounds 設定 → 初期化 → 初回描画
         engine.getEcosystem().setBounds(
                 drawPane.getWidth(), drawPane.getHeight());
-        engine.initialize(50, 20, 8);
+        engine.initialize(200, 20, 10);
         updateDisplay(
                 engine.getStepCount(),
                 engine.getCounts(),
@@ -157,7 +176,7 @@ public class SimulatorGUI extends Application {
             // 4) bounds を反映してから初期化
             engine.getEcosystem().setBounds(
                     drawPane.getWidth(), drawPane.getHeight());
-            engine.initialize(50, 20, 8);
+            engine.initialize(200, 20, 10);
 
             updateDisplay(
                     engine.getStepCount(),

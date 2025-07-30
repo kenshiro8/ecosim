@@ -12,15 +12,27 @@ public class PopulationManager {
 
         while (it.hasNext()) {
             AbstractOrganism o = it.next();
-            o.move(dt);
-            o.grow(dt);
+            o.move(dt);      // 位置を更新
+            o.grow(dt);      // エネルギー消費など
+
+            // 草食動物なら食べる処理
+            if (o instanceof Herbivore) {
+                ((Herbivore) o).eat(eco.getOrganisms());
+            }
+
             if (o.getEnergy() <= 0) {
-                it.remove();
+                it.remove(); // エネルギー切れで死
                 continue;
             }
+
+            // 繁殖して子供が生まれたら一時リストに追加
             AbstractOrganism child = o.reproduce(dt);
-            if (child != null) newborns.add(child);
+            if (child != null) {
+                newborns.add(child);
+            }
         }
+
+        // 最後にまとめて追加（イテレータ操作中に追加しないため）
         eco.getOrganisms().addAll(newborns);
     }
 }
