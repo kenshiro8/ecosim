@@ -4,17 +4,30 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.example.ecosim.util.RandomProvider;
-
 import javafx.geometry.Point2D;
 
 public class Herbivore extends Animal {
     private double stomachCapacity;
+    private final Ecosystem ecosystem;
 
-    public Herbivore(String id, Point2D pos, double e, int speed, double stomachCapacity) {
+    public Herbivore(
+        String id,
+        Point2D pos,
+        double e,
+        int speed,
+        double stomachCapacity,
+        Ecosystem ecosystem
+    ) {
         super(id, pos, e, speed, 1.0);
         this.stomachCapacity = stomachCapacity;
-        // 移動Behavior を注入（1秒ごとに方向変更）
-        setMovementBehavior(new RandomWalkBehavior(1.0));
+        this.ecosystem = ecosystem;
+
+        setMovementBehavior(
+            new GoalDirectedBehavior(
+                () -> this.ecosystem.getPlants(),
+                speed
+            )
+        );
     }
 
     @Override
@@ -27,14 +40,20 @@ public class Herbivore extends Animal {
         double reproRatePerSec = 0.5;
         if (energy > stomachCapacity * 1.2
                 && RandomProvider.get().nextDouble() < reproRatePerSec * dt) {
-            Herbivore child = new Herbivore(id + "-c", position, energy / 2, speed, stomachCapacity);
+            Herbivore child = new Herbivore(
+                id + "-c",
+                position,
+                energy / 2,
+                speed,
+                stomachCapacity,
+                ecosystem
+            );
             energy /= 1.5;
             return child;
         }
         return null;
     }
 
-    
     public void eat(List<AbstractOrganism> organisms) {
         if (organisms == null) return;
 
@@ -54,5 +73,4 @@ public class Herbivore extends Animal {
             }
         }
     }
-    
 }

@@ -41,6 +41,7 @@ public abstract class AbstractOrganism {
 
     public final void move(double dt) {
         if (movementBehavior != null) {
+            // 旧: movementBehavior.computeNextPosition(this, dt);
             this.position = movementBehavior.computeNextPosition(this, dt);
         }
     }
@@ -79,4 +80,8 @@ public abstract class AbstractOrganism {
     public String getId() {
         return id;
     }
+    public void setPosition(Point2D newPosition) {
+        this.position = newPosition;
+    }
+
 }

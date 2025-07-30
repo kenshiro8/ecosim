@@ -22,4 +22,5 @@ com\example\ecosim\model\MovementBehavior.class
 com\example\ecosim\model\Plant.class
 com\example\ecosim\model\EnvironmentalEvent.class
 com\example\ecosim\model\Typhoon.class
+com\example\ecosim\model\GoalDirectedBehavior.class
 com\example\ecosim\model\Carnivore.class

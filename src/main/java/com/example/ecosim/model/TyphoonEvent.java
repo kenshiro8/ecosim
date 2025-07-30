@@ -1,5 +1,7 @@
 package com.example.ecosim.model;
 
+import java.util.List;
+
 import javafx.geometry.Point2D;
 
 /**
@@ -23,9 +25,12 @@ public class TyphoonEvent implements EnvironmentalEvent {
     }
 
     @Override
-    public void applyEvent(Ecosystem eco) {
-        // model パッケージの Typhoon クラスを使って効果を適用
-        Typhoon ty = new Typhoon(center, radius, strength);
-        eco.applyTyphoon(ty);
+    public void applyEvent(Ecosystem ecosystem) {
+        for (Animal a : ecosystem.getAllAnimals()) {
+            a.setPosition(a.getPosition()
+                .add(Math.random() - 0.5, Math.random() - 0.5));
+            a.energy -= strength * Math.random();
+        }
     }
+
 }

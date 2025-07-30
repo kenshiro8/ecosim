@@ -2,12 +2,10 @@ package com.example.ecosim.model;
 
 import javafx.geometry.Point2D;
 
-/**
- * 動かない個体用の MovementBehavior
- */
 public class NoMovementBehavior implements MovementBehavior {
     @Override
-    public Point2D computeNextPosition(AbstractOrganism o, double dt) {
-        return o.getPosition();
+    public Point2D computeNextPosition(AbstractOrganism org, double dt) {
+        // 動かさない（常に同じ位置を返す）
+        return org.getPosition();
     }
 }

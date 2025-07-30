@@ -1,7 +1,5 @@
 package com.example.ecosim.model;
 
-import com.example.ecosim.model.*;
-
 import java.util.Queue;
 import java.util.LinkedList;
 

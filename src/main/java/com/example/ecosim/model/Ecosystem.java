@@ -63,7 +63,7 @@ public class Ecosystem {
             double initEnergy = 100.0 + random.nextDouble() * 10.0;
             int speed = 1 + random.nextInt(3);
             double stomachCap = 5.0 + random.nextDouble() * 5.0;
-            organisms.add(new Herbivore("H" + i, pos, initEnergy, speed, stomachCap));
+            organisms.add(new Herbivore("H" + i, pos, initEnergy, speed, stomachCap, this));
         }
 
         // 肉食動物を生成
@@ -72,7 +72,7 @@ public class Ecosystem {
             double initEnergy = 150.0 + random.nextDouble() * 10.0;
             int speed = 2 + random.nextInt(3);
             double huntingSkill = 0.3 + random.nextDouble() * 0.7;
-            organisms.add(new Carnivore("C" + i, pos, initEnergy, speed, huntingSkill));
+            organisms.add(new Carnivore("C" + i, pos, initEnergy, speed, huntingSkill, this));
         }
     }
 
@@ -122,7 +122,37 @@ public class Ecosystem {
                 random.nextDouble() * width,
                 random.nextDouble() * height);
     }
+
     public Environment getEnvironment() {
-    return environment;
-}
+        return environment;
+    }
+
+    public List<Plant> getPlants() {
+        return organisms.stream()
+                .filter(o -> o instanceof Plant)
+                .map(o -> (Plant) o)
+                .collect(Collectors.toList());
+    }
+
+    public List<Herbivore> getHerbivores() {
+        return organisms.stream()
+                .filter(o -> o instanceof Herbivore)
+                .map(o -> (Herbivore) o)
+                .collect(Collectors.toList());
+    }
+
+    public List<Carnivore> getCarnivores() {
+        return organisms.stream()
+                .filter(o -> o instanceof Carnivore)
+                .map(o -> (Carnivore) o)
+                .collect(Collectors.toList());
+    }
+
+    public List<Animal> getAllAnimals() {
+        return organisms.stream()
+                .filter(o -> o instanceof Animal)
+                .map(o -> (Animal) o)
+                .collect(Collectors.toList());
+    }
+
 }

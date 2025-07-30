@@ -1,18 +1,20 @@
-// src/main/java/com/example/ecosim/model/DroughtEvent.java
 package com.example.ecosim.model;
 
+/**
+ * 干ばつイベント：一定時間ごとに植物を枯らす
+ */
 public class DroughtEvent implements EnvironmentalEvent {
-  private final double severity; // 0.0〜1.0
+    private final double interval;
+    
+    public DroughtEvent(double intervalSeconds) {
+        this.interval = intervalSeconds;
+    }
 
-  public DroughtEvent(double severity) {
-    this.severity = severity;
-  }
-
-  @Override
-  public void applyEvent(Ecosystem eco) {
-    eco.getOrganisms().stream()
-        .filter(o -> o instanceof Plant)
-        .map(o -> (Plant) o)
-        .forEach(p -> p.applyDrought(severity));
-  }
+    @Override
+    public void applyEvent(Ecosystem ecosystem) {
+        // 例: 全 Plant のエネルギーを減らす
+        for (Plant p : ecosystem.getPlants()) {
+            p.applyDrought(interval);
+        }
+    }
 }

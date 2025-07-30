@@ -1,7 +1,5 @@
 package com.example.ecosim.model;
 
-import com.example.ecosim.model.*;
-
 public class EnvironmentManager {
     private final Environment env;
 
