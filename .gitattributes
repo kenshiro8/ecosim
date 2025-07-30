@@ -1,0 +1,2 @@
+runtime/javafx-sdk/bin/*.dll filter=lfs diff=lfs merge=lfs -text
+runtime/lib/modules filter=lfs diff=lfs merge=lfs -text
