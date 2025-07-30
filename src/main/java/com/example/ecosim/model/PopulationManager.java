@@ -9,15 +9,17 @@ public class PopulationManager {
     public void update(Ecosystem eco, double dt) {
         List<AbstractOrganism> newborns = new ArrayList<>();
         Iterator<AbstractOrganism> it = eco.getOrganisms().iterator();
+        List<Plant> plants = eco.getPlants();
+        List<Plant> eaten = new ArrayList<>();
 
         while (it.hasNext()) {
             AbstractOrganism o = it.next();
-            o.move(dt);      // 位置を更新
-            o.grow(dt);      // エネルギー消費など
+            o.move(dt); // 位置を更新
+            o.grow(dt); // エネルギー消費など
 
             // 草食動物なら食べる処理
             if (o instanceof Herbivore) {
-                ((Herbivore) o).eat(eco.getOrganisms());
+                ((Herbivore) o).eat(plants);
             }
 
             if (o.getEnergy() <= 0) {
@@ -31,7 +33,8 @@ public class PopulationManager {
                 newborns.add(child);
             }
         }
-
+        // ループ後／newborns 追加前に
+        eco.getOrganisms().removeAll(eaten);
         // 最後にまとめて追加（イテレータ操作中に追加しないため）
         eco.getOrganisms().addAll(newborns);
     }

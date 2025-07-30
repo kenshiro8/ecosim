@@ -52,7 +52,7 @@ public class Ecosystem {
         // 植物を生成
         for (int i = 0; i < numPlants; i++) {
             Point2D pos = randomPosition();
-            double initEnergy = 5.0 + random.nextDouble() * 5.0;
+            double initEnergy = 10.0 + random.nextDouble() * 5.0;
             double growthRate = 0.05 + random.nextDouble() * 0.15;
             organisms.add(new Plant("P" + i, pos, initEnergy, growthRate));
         }
@@ -60,7 +60,7 @@ public class Ecosystem {
         // 草食動物を生成
         for (int i = 0; i < numHerbivores; i++) {
             Point2D pos = randomPosition();
-            double initEnergy = 100.0 + random.nextDouble() * 10.0;
+            double initEnergy = 200.0 + random.nextDouble() * 10.0;
             int speed = 1 + random.nextInt(3);
             double stomachCap = 5.0 + random.nextDouble() * 5.0;
             organisms.add(new Herbivore("H" + i, pos, initEnergy, speed, stomachCap, this));
