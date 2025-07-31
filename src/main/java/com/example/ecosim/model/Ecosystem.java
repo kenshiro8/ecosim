@@ -22,7 +22,7 @@ public class Ecosystem {
     private Environment environment;
     private final Random random = new Random();
 
-    private int maxPlants = 500;
+    private int maxPlants = 400;
 
     public int getMaxPlants() {
         return maxPlants;
