@@ -4,48 +4,79 @@ import javafx.geometry.Point2D;
 import com.example.ecosim.util.RandomProvider;
 
 public class Carnivore extends Animal {
+    // 繁殖パラメータのデフォルト値
+    private static final double DEFAULT_REPRO_RATE_PER_SEC     = 0.15;
+    private static final double DEFAULT_REPRO_ENERGY_THRESHOLD = 20.0;
+
     private double huntingSkill;
     private final Ecosystem ecosystem;
+    private final double reproRatePerSec;
+    private final double reproEnergyThreshold;
 
+    /** フルパラメータ版コンストラクタ（Ecosystem 側で任意の値を渡したい場合） */
     public Carnivore(
             String id,
             Point2D pos,
-            double e,
+            double initialEnergy,
+            int speed,
+            double huntingSkill,
+            double reproRatePerSec,
+            double reproEnergyThreshold,
+            Ecosystem ecosystem) {
+        super(id, pos, initialEnergy, speed, 1.5);
+        this.huntingSkill         = huntingSkill;
+        this.reproRatePerSec      = reproRatePerSec;
+        this.reproEnergyThreshold = reproEnergyThreshold;
+        this.ecosystem            = ecosystem;
+
+        setMovementBehavior(
+            new GoalDirectedBehavior(
+                () -> this.ecosystem.getHerbivores(),
+                speed));
+    }
+
+    /** デフォルト設定を使う簡易コンストラクタ */
+    public Carnivore(
+            String id,
+            Point2D pos,
+            double initialEnergy,
             int speed,
             double huntingSkill,
             Ecosystem ecosystem) {
-        super(id, pos, e, speed, 1.5);
-        this.huntingSkill = huntingSkill;
-        this.ecosystem = ecosystem;
-
-        setMovementBehavior(
-                new GoalDirectedBehavior(
-                        () -> this.ecosystem.getHerbivores(),
-                        speed));
+        this(
+            id,
+            pos,
+            initialEnergy,
+            speed,
+            huntingSkill,
+            DEFAULT_REPRO_RATE_PER_SEC,
+            DEFAULT_REPRO_ENERGY_THRESHOLD,
+            ecosystem
+        );
     }
 
     @Override
     public void hunt() {
-        // 既存の狩りロジックをここに残す
+        // ここに狩りロジックを実装
     }
 
     @Override
     public AbstractOrganism reproduce(double dt) {
-        // 既存の繁殖ロジックをここに残す
-        double reproRatePerSec = huntingSkill * 0.05;
-        if (energy > 30
-                && RandomProvider.get().nextDouble() < reproRatePerSec * dt) {
+        if (energy > reproEnergyThreshold
+            && RandomProvider.get().nextDouble() < reproRatePerSec * dt) {
+            double childEnergy = energy / 2;
             Carnivore child = new Carnivore(
-                    id + "-c",
-                    position,
-                    energy / 2,
-                    speed,
-                    huntingSkill,
-                    ecosystem);
-            energy /= 2;
+                id + "-c",
+                position,
+                childEnergy,
+                speed,
+                huntingSkill,
+                reproRatePerSec,
+                reproEnergyThreshold,
+                ecosystem);
+            energy -= childEnergy;
             return child;
         }
-        // 繁殖しなかった場合は null を返す
         return null;
     }
 }

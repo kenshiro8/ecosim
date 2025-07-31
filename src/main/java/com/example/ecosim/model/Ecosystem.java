@@ -93,11 +93,6 @@ public class Ecosystem {
                     speed,
                     huntingSkill,
                     this);
-            // 草食動物リストを常に最新で参照し、speedで移動
-            c.setMovementBehavior(
-                    new GoalDirectedBehavior(
-                            () -> this.getHerbivores(),
-                            speed));
             organisms.add(c);
         }
     }
