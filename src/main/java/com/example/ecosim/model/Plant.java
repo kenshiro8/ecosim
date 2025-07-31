@@ -54,7 +54,19 @@ public class Plant extends AbstractOrganism {
         return null;
     }
 
-    public void applyDrought(double severity) {
-        energy -= severity * 2.0;
+    /**
+     * 干ばつによるエネルギー減少と死亡判定
+     * @param severity 干ばつの深刻度
+     * @return true = エネルギーが0以下（死）
+     */
+    public boolean applyDrought(double severity) {
+        energy -= severity * 30.0;
+        return energy <= 0;
+    }
+    /**
+     * ID取得（デバッグや表示用）
+     */
+    public String getId() {
+        return this.id;
     }
 }
