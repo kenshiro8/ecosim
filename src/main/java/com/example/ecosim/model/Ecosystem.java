@@ -108,6 +108,7 @@ public class Ecosystem {
     public void updateEcosystem(double dt) {
         List<AbstractOrganism> newborns = new ArrayList<>();
         List<Plant> eatenPlants = new ArrayList<>(); // ①追加：食べられた植物を収集
+        List<Herbivore> eatenHerbivores = new ArrayList<>();
         Iterator<AbstractOrganism> it = organisms.iterator();
 
         while (it.hasNext()) {
@@ -121,6 +122,13 @@ public class Ecosystem {
                 if (prey != null) {
                     eatenPlants.add(prey);
                 }
+            }
+
+            if (o instanceof Carnivore) {
+                // 副作用で直接 remove() せずに、返り値を集めるパターン
+                Herbivore prey = ((Carnivore) o).hunt();
+                if (prey != null)
+                    eatenHerbivores.add(prey);
             }
 
             // エネルギー切れで死亡
@@ -138,6 +146,7 @@ public class Ecosystem {
 
         // ②ループ後に食べられた植物を一気に削除
         organisms.removeAll(eatenPlants);
+        organisms.removeAll(eatenHerbivores);
 
         // 新生個体を追加
         organisms.addAll(newborns);

@@ -28,8 +28,8 @@ public class Herbivore extends Animal {
     }
 
     @Override
-    public void hunt() {
-        // 草食なので空実装
+    public AbstractOrganism hunt() {
+        return null;
     }
 
     @Override

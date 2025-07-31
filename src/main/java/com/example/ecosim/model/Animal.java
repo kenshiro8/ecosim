@@ -27,7 +27,7 @@ public abstract class Animal extends AbstractOrganism {
         super.age += dt; // age の扱いを秒数に合わせるなら
     }
 
-    public abstract void hunt();
+    public abstract AbstractOrganism hunt();
 
     public void flee() {
         /* 逃走ロジック */ }

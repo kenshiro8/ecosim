@@ -1,6 +1,9 @@
 package com.example.ecosim.model;
 
 import javafx.geometry.Point2D;
+
+import java.util.Comparator;
+
 import com.example.ecosim.util.RandomProvider;
 
 public class Carnivore extends Animal {
@@ -12,6 +15,8 @@ public class Carnivore extends Animal {
     private final Ecosystem ecosystem;
     private final double reproRatePerSec;
     private final double reproEnergyThreshold;
+
+    private static final double HUNT_RANGE = 2.0;
 
     /** フルパラメータ版コンストラクタ（Ecosystem 側で任意の値を渡したい場合） */
     public Carnivore(
@@ -56,9 +61,23 @@ public class Carnivore extends Animal {
     }
 
     @Override
-    public void hunt() {
-        // ここに狩りロジックを実装
+    public Herbivore hunt() {
+        // 2m以内の Herbivore をストリームで検索し、最も近いものを取得
+        Herbivore closest = ecosystem.getHerbivores().stream()
+            .filter(h -> h.getPosition().distance(this.getPosition()) <= HUNT_RANGE)
+            .min(Comparator.comparingDouble(
+                h -> h.getPosition().distance(this.getPosition())))
+            .orElse(null);
+
+        if (closest != null) {
+            // 捕食成功：被捕食者エネルギーの75%を獲得（上限は maxEnergy）
+            double gained = closest.getEnergy() * 0.75;
+            this.energy = Math.min(this.maxEnergy, this.energy + gained);
+            return closest;
+        }
+        return null;
     }
+
 
     @Override
     public AbstractOrganism reproduce(double dt) {
