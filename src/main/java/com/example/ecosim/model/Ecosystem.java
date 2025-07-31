@@ -22,6 +22,12 @@ public class Ecosystem {
     private Environment environment;
     private final Random random = new Random();
 
+    private int maxPlants = 500;
+
+    public int getMaxPlants() {
+        return maxPlants;
+    }
+
     public Ecosystem() {
         // organisms, random はフィールド初期化子で生成済み
         this.environment = new Environment(20.0, 0.7, Season.SPRING);
@@ -54,8 +60,20 @@ public class Ecosystem {
             Point2D pos = randomPosition();
             double initEnergy = 5.0 + random.nextDouble() * 5.0;
             double growthRate = 0.05 + random.nextDouble() * 0.15;
-            organisms.add(new Plant("P" + i, pos, initEnergy, growthRate));
+            // carryingCapacity と reproductionThreshold は任意の値
+            double carryingCapacity = 200.0;
+            double reproductionThreshold = 50.0;
+
+            organisms.add(new Plant(
+                "P" + i,
+                pos,
+                initEnergy,
+                growthRate,
+                carryingCapacity,
+                reproductionThreshold,
+                this));
         }
+
 
         // 草食動物を生成して GoalDirectedBehavior をセット
         for (int i = 0; i < numHerbivores; i++) {
@@ -182,6 +200,12 @@ public class Ecosystem {
                 .filter(o -> o instanceof Plant)
                 .map(o -> (Plant) o)
                 .collect(Collectors.toList());
+    }
+
+    public int getPlantCount() {
+        return (int) organisms.stream()
+                .filter(o -> o instanceof Plant)
+                .count();
     }
 
     public List<Herbivore> getHerbivores() {
