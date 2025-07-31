@@ -207,13 +207,13 @@ public class SimulatorGUI extends Application {
         // 0) 環境情報を取得してラベル更新 ← 追加
         Environment env = engine.getEcosystem().getEnvironment();
         envLabel.setText(String.format(
-                "Season: %s  Temp: %.1f℃  Hum: %.2f",
+                "季節: %s  気温: %.1f℃  Hum: %.2f",
                 env.getSeason(), env.getTemperature(), env.getHumidity()));
 
         // 1) ラベル更新
         stepLabel.setText("Step: " + step);
         statsLabel.setText(String.format(
-                "Plants:%d Herb:%d Carn:%d AvgE:%.2f",
+                "植物:%d 草食動物:%d 肉食動物:%d 平均エネルギー:%.2f",
                 counts.getOrDefault("Plant", 0L),
                 counts.getOrDefault("Herbivore", 0L),
                 counts.getOrDefault("Carnivore", 0L),

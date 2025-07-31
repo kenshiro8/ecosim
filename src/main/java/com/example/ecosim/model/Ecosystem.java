@@ -52,27 +52,53 @@ public class Ecosystem {
         // 植物を生成
         for (int i = 0; i < numPlants; i++) {
             Point2D pos = randomPosition();
-            double initEnergy = 10.0 + random.nextDouble() * 5.0;
+            double initEnergy = 5.0 + random.nextDouble() * 5.0;
             double growthRate = 0.05 + random.nextDouble() * 0.15;
             organisms.add(new Plant("P" + i, pos, initEnergy, growthRate));
         }
 
-        // 草食動物を生成
+        // 草食動物を生成して GoalDirectedBehavior をセット
         for (int i = 0; i < numHerbivores; i++) {
             Point2D pos = randomPosition();
             double initEnergy = 200.0 + random.nextDouble() * 10.0;
-            int speed = 1 + random.nextInt(3);
+            int speed = 500 + random.nextInt(3);
             double stomachCap = 5.0 + random.nextDouble() * 5.0;
-            organisms.add(new Herbivore("H" + i, pos, initEnergy, speed, stomachCap, this));
+
+            Herbivore h = new Herbivore(
+                    "H" + i,
+                    pos,
+                    initEnergy,
+                    speed,
+                    stomachCap,
+                    this);
+            // 目標：常に最新の植物リストを返す Supplier／速度は speed
+            h.setMovementBehavior(
+                    new GoalDirectedBehavior(
+                            () -> this.getPlants(),
+                            speed));
+            organisms.add(h);
         }
 
-        // 肉食動物を生成
+        // 肉食動物を生成して草食動物を目標に設定
         for (int i = 0; i < numCarnivores; i++) {
             Point2D pos = randomPosition();
             double initEnergy = 150.0 + random.nextDouble() * 10.0;
-            int speed = 2 + random.nextInt(3);
+            int speed = 500 + random.nextInt(3);
             double huntingSkill = 0.3 + random.nextDouble() * 0.7;
-            organisms.add(new Carnivore("C" + i, pos, initEnergy, speed, huntingSkill, this));
+
+            Carnivore c = new Carnivore(
+                    "C" + i,
+                    pos,
+                    initEnergy,
+                    speed,
+                    huntingSkill,
+                    this);
+            // 草食動物リストを常に最新で参照し、speedで移動
+            c.setMovementBehavior(
+                    new GoalDirectedBehavior(
+                            () -> this.getHerbivores(),
+                            speed));
+            organisms.add(c);
         }
     }
 
