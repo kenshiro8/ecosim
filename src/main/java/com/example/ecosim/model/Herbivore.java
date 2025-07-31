@@ -35,16 +35,17 @@ public class Herbivore extends Animal {
     @Override
     public AbstractOrganism reproduce(double dt) {
         double reproRatePerSec = 0.5;
-        if (energy > stomachCapacity * 1.2
+        if (energy > maxEnergy * 0.5
                 && RandomProvider.get().nextDouble() < reproRatePerSec * dt) {
+            double childEnergy = energy / 2;
             Herbivore child = new Herbivore(
                     id + "-c",
                     position,
-                    energy / 2,
+                    childEnergy,
                     speed,
                     stomachCapacity,
                     ecosystem);
-            energy /= 1.5;
+            energy -= childEnergy; // 子に与えた分だけ親は消費
             return child;
         }
         return null;
@@ -57,10 +58,14 @@ public class Herbivore extends Animal {
     public Plant eat(List<Plant> plants) {
         double eatRange = 50.0;
         double energyGainPerPlant = 20.0;
+        if (stomachCapacity <= 0)
+            return null; // 満腹なら何もしない
 
         for (Plant plant : plants) {
-            if (plant.getPosition().distance(this.getPosition()) <= eatRange) {
-                this.energy = Math.min(this.energy + energyGainPerPlant, stomachCapacity);
+            if (plant.getPosition().distance(getPosition()) <= eatRange) {
+                double gained = Math.min(energyGainPerPlant, stomachCapacity);
+                energy = Math.min(energy + gained, this.maxEnergy);
+                stomachCapacity -= gained;
                 return plant;
             }
         }

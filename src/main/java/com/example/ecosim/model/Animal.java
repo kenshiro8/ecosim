@@ -6,10 +6,12 @@ import javafx.geometry.Point2D;
 public abstract class Animal extends AbstractOrganism {
     protected int speed;
     protected double metabolism;
+    protected double maxEnergy;
 
-    public Animal(String id, Point2D pos, double e, int speed, double metabolism) {
-        super(id, pos, e);
+    public Animal(String id, Point2D pos, double initialEnergy, int speed, double metabolism) {
+        super(id, pos, initialEnergy);
         this.speed = speed;
+        this.maxEnergy = initialEnergy;
         this.metabolism = metabolism;
     }
 

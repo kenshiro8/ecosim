@@ -112,19 +112,39 @@ public class Ecosystem {
 
     public void updateEcosystem(double dt) {
         List<AbstractOrganism> newborns = new ArrayList<>();
+        List<Plant> eatenPlants = new ArrayList<>(); // ①追加：食べられた植物を収集
         Iterator<AbstractOrganism> it = organisms.iterator();
+
         while (it.hasNext()) {
             AbstractOrganism o = it.next();
             o.move(dt);
             o.grow(dt);
+
+            // ①草食動物なら摂食処理 → 食べたPlantをeatenPlantsへ
+            if (o instanceof Herbivore) {
+                Plant prey = ((Herbivore) o).eat(getPlants());
+                if (prey != null) {
+                    eatenPlants.add(prey);
+                }
+            }
+
+            // エネルギー切れで死亡
             if (o.getEnergy() <= 0) {
-                it.remove(); // 死亡
+                it.remove();
                 continue;
             }
+
+            // 繁殖判定
             AbstractOrganism child = o.reproduce(dt);
-            if (child != null)
+            if (child != null) {
                 newborns.add(child);
+            }
         }
+
+        // ②ループ後に食べられた植物を一気に削除
+        organisms.removeAll(eatenPlants);
+
+        // 新生個体を追加
         organisms.addAll(newborns);
     }
 
