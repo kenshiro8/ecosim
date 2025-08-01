@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Main-Class: com.example.ecosim.view.SimulatorGUI
+Class-Path: lib/javafx-base-17.jar lib/javafx-graphics-17.jar lib/javafx-controls-17.jar
+Implementation-Version: 1.0-SNAPSHOT
+
