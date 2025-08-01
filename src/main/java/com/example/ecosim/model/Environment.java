@@ -11,25 +11,35 @@ public class Environment {
         this.season = season;
     }
 
-    public double getTemperature() { return temperature; }
-    public double getHumidity()    { return humidity; }
-    public Season getSeason()      { return season; }
+    public double getTemperature() {
+        return temperature;
+    }
+
+    public double getHumidity() {
+        return humidity;
+    }
+
+    public Season getSeason() {
+        return season;
+    }
 
     public void changeSeason() {
         this.season = season.next();
+        this.temperature = season.generateTemperature();
+
         switch (season) {
-            case SPRING: temperature = 15; humidity = 0.7; break;
-            case SUMMER: temperature = 25; humidity = 0.6; break;
-            case AUTUMN: temperature = 10; humidity = 0.8; break;
-            case WINTER: temperature = 0;  humidity = 0.5; break;
+            case SPRING: humidity = 0.7; break;
+            case SUMMER: humidity = 0.6; break;
+            case AUTUMN: humidity = 0.8; break;
+            case WINTER: humidity = 0.5; break;
         }
     }
 
     public void updateWeather() {
-        double dt = (Math.random() - 0.5) * 2;   // ±1℃
-        double dh = (Math.random() - 0.5) * 0.1; // ±0.05
+        double dt = (Math.random() - 0.5) * 1.0;   // ±0.5℃
+        double dh = (Math.random() - 0.5) * 0.1;   // ±0.05
         temperature = clamp(temperature + dt, -10, 40);
-        humidity    = clamp(humidity + dh,        0, 1);
+        humidity = clamp(humidity + dh, 0, 1);
     }
 
     private double clamp(double v, double min, double max) {

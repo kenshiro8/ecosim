@@ -2,16 +2,20 @@ package com.example.ecosim.model;
 
 public class EnvironmentManager {
     private final Environment env;
+    private int stepCounter = 0;
 
     public EnvironmentManager(Environment env) {
         this.env = env;
     }
 
-    /** 毎ステップ呼び出し */
     public void update(double dt) {
         env.updateWeather();
-        if (Math.random() < 0.0005) {
+        stepCounter++;
+
+        // 450ステップ（フレーム）ごとに季節変更
+        if (stepCounter >= 450) {
             env.changeSeason();
+            stepCounter = 0;
         }
     }
 
