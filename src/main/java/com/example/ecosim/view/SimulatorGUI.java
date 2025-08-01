@@ -66,7 +66,7 @@ public class SimulatorGUI extends Application {
         typhoonBtn = new Button("台風発生");
         droughtBtn = new Button("干ばつ発生");
 
-        speedSlider = new Slider(0.1, 5.0, 1.0);
+        speedSlider = new Slider(0.01, 2.0, 1.0);
         speedSlider.setShowTickLabels(true);
         speedSlider.setShowTickMarks(true);
         speedSlider.setMajorTickUnit(1.0);
@@ -269,7 +269,7 @@ public class SimulatorGUI extends Application {
                 env.getSeason(), env.getTemperature(), env.getHumidity()));
 
         // 1) ラベル更新
-        stepLabel.setText("Step: " + step);
+        stepLabel.setText("Step: " + step / 50);
         statsLabel.setText(String.format(
                 "植物:%d 草食動物:%d 肉食動物:%d 平均エネルギー:%.2f",
                 counts.getOrDefault("Plant", 0L),
