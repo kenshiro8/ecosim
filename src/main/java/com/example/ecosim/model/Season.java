@@ -26,7 +26,7 @@ public enum Season {
         return temperatureVariance;
     }
 
-    /** 各季節に応じたランダムな気温を返す */
+    /** 各季節に応じたランダムな気温を返す  */
     public double generateTemperature() {
         return averageTemperature + (Math.random() - 0.5) * 2 * temperatureVariance;
     }

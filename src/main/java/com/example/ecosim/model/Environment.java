@@ -17,7 +17,7 @@ public class Environment {
 
     public void changeSeason() {
         this.season = season.next();
-        this.temperature = season.generateTemperature();  // 季節ごとの気温にリセット
+        this.temperature = season.generateTemperature();  // 季節ごとの気温にリセット.
 
         switch (season) {
             case SPRING: humidity = 0.7; break;

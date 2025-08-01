@@ -2,7 +2,7 @@ package com.example.ecosim.model;
 
 public class EnvironmentManager {
     private final Environment env;
-    private int stepCounter = 0; // ステップ数カウンタ
+    private int stepCounter = 0; // ステップ数カウンタ-
 
     public EnvironmentManager(Environment env) {
         this.env = env;
