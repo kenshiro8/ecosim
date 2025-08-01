@@ -25,8 +25,6 @@ public class Environment {
 
     public void changeSeason() {
         this.season = season.next();
-        this.temperature = season.generateTemperature();
-
         switch (season) {
             case SPRING: humidity = 0.7; break;
             case SUMMER: humidity = 0.6; break;
@@ -36,10 +34,10 @@ public class Environment {
     }
 
     public void updateWeather() {
-        double dt = (Math.random() - 0.5) * 1.0;   // ±0.5℃
-        double dh = (Math.random() - 0.5) * 0.1;   // ±0.05
+        double dt = (Math.random() - 0.5) * 2;   // ±1℃
+        double dh = (Math.random() - 0.5) * 0.1; // ±0.05
         temperature = clamp(temperature + dt, -10, 40);
-        humidity = clamp(humidity + dh, 0, 1);
+        humidity    = clamp(humidity + dh,        0, 1);
     }
 
     private double clamp(double v, double min, double max) {
