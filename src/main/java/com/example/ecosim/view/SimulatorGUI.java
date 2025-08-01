@@ -15,6 +15,8 @@ import com.example.ecosim.model.TyphoonEvent;
 import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
+import javafx.animation.PauseTransition;
+import javafx.animation.SequentialTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -51,6 +53,9 @@ public class SimulatorGUI extends Application {
     private Slider speedSlider;
     private Button typhoonBtn;
     private Button droughtBtn;
+    private Pane organismLayer;
+    private Pane overlayPane;
+    private String defaultPaneStyle;
 
     @Override
     public void start(Stage stage) {
@@ -75,9 +80,24 @@ public class SimulatorGUI extends Application {
         controlBar.setPadding(new Insets(10));
         controlBar.setAlignment(Pos.CENTER);
 
-        // 2) 描画・情報エリアの作成
+        // 2) 描画エリア（drawPane）と２つの重ねレイヤーを準備
         drawPane = new Pane();
         drawPane.setPrefSize(Ecosystem.WIDTH, Ecosystem.HEIGHT);
+
+        organismLayer = new Pane();
+        organismLayer.prefWidthProperty().bind(drawPane.widthProperty());
+        organismLayer.prefHeightProperty().bind(drawPane.heightProperty());
+
+        overlayPane = new Pane();
+        overlayPane.setMouseTransparent(true);
+        overlayPane.prefWidthProperty().bind(drawPane.widthProperty());
+        overlayPane.prefHeightProperty().bind(drawPane.heightProperty());
+
+        // 一度だけ追加。addAll で順序を保証（overlayPane が上）
+        drawPane.getChildren().addAll(organismLayer, overlayPane);
+
+        // 元の drawPane スタイルを保存
+        defaultPaneStyle = drawPane.getStyle();
 
         VBox infoBox = new VBox(5, stepLabel, statsLabel, envLabel);
         infoBox.setPadding(new Insets(10));
@@ -167,7 +187,8 @@ public class SimulatorGUI extends Application {
 
             // 2) 既存のビューをクリア
             viewMap.clear();
-            drawPane.getChildren().clear();
+            organismLayer.getChildren().clear();
+
 
             // 3) 新しいエンジンを生成し GUI をセット
             engine = new SimulationEngine();
@@ -185,17 +206,54 @@ public class SimulatorGUI extends Application {
         });
         // 台風発生ボタン
         typhoonBtn.setOnAction(e -> {
-            double cx = drawPane.getWidth() / 2;
-            double cy = drawPane.getHeight() / 2;
+            // 発生前の動物数・エネルギー合計を取得
+            int beforeCount = engine.getEcosystem().getAllAnimals().size();
+            double beforeEnergy = engine.getEcosystem().getAllAnimals().stream()
+                    .mapToDouble(o -> o.getEnergy()).sum();
+
+            // イベント登録→即時適用
             engine.addEvent(new TyphoonEvent(
-                    new Point2D(cx, cy), // 台風中心
-                    80, // 半径
-                    5.0 // 強さ
-            ));
+                    new Point2D(drawPane.getWidth() / 2, drawPane.getHeight() / 2),
+                    80, 5.0));
+            engine.step(0); // dt=0 でイベントのみ適用
+
+            // 発生後の動物数・エネルギー合計を取得
+            int afterCount = engine.getEcosystem().getAllAnimals().size();
+            double afterEnergy = engine.getEcosystem().getAllAnimals().stream()
+                    .mapToDouble(o -> o.getEnergy()).sum();
+
+            // 被害量を計算
+            int died = beforeCount - afterCount;
+            double energyDropPercent = beforeEnergy == 0
+                    ? 0
+                    : (beforeEnergy - afterEnergy) / beforeEnergy * 100.0;
+
+            // 背景閃光＆メッセージ
+            flashBackground("rgba(100,100,255,0.3)"); // 水色っぽく
+            showEventMessage(
+                    String.format("台風被害：%d頭消滅  エネルギー：%.0f%%減", died, energyDropPercent));
         });
+
         // 干ばつ発生ボタン
         droughtBtn.setOnAction(e -> {
-            engine.addEvent(new DroughtEvent(0.3)); // severity=0.3
+            // 発生前の植物エネルギー合計
+            double beforeEnergy = engine.getEcosystem().getPlants().stream()
+                    .mapToDouble(p -> p.getEnergy()).sum();
+
+            engine.addEvent(new DroughtEvent(0.3));
+            engine.step(0);
+
+            // 発生後の植物エネルギー合計
+            double afterEnergy = engine.getEcosystem().getPlants().stream()
+                    .mapToDouble(p -> p.getEnergy()).sum();
+
+            double dropPercent = beforeEnergy == 0
+                    ? 0
+                    : (beforeEnergy - afterEnergy) / beforeEnergy * 100.0;
+
+            flashBackground("rgba(255,200,100,0.3)"); // 暖色に
+            showEventMessage(
+                    String.format("植物エネルギー：%.0f%%減", dropPercent));
         });
 
         // 11) シミュレーション自動開始
@@ -240,7 +298,7 @@ public class SimulatorGUI extends Application {
             if (ov == null) {
                 ov = new OrganismView(o);
                 viewMap.put(o, ov);
-                drawPane.getChildren().add(ov.getNode());
+                organismLayer.getChildren().add(ov.getNode());
                 ov.playSpawnAnimation();
                 ov.updatePositionInstant();
             } else {
@@ -281,6 +339,63 @@ public class SimulatorGUI extends Application {
             drawPane.getChildren().remove(node);
         });
         ft.play();
+    }
+
+    /**
+     * 背景色を一時的に変えて、2秒後に元に戻す
+     */
+    private void flashBackground(String flashCssColor) {
+        // ▲ ここでオーバーレイを最前面にする ▲
+        overlayPane.toFront();
+
+        drawPane.setStyle("-fx-background-color: " + flashCssColor + ";");
+
+        PauseTransition pause = new PauseTransition(Duration.seconds(2));
+        pause.setOnFinished(ev -> {
+            // 元のスタイルに戻す
+            drawPane.setStyle(defaultPaneStyle);
+            // 念のためオーバーレイを最前面に
+            overlayPane.toFront();
+        });
+        pause.play();
+    }
+
+    /**
+     * 画面中央にメッセージをフェードイン／フェードアウトで表示
+     */
+    private void showEventMessage(String message) {
+        // overlayPane を最前面に
+        overlayPane.toFront();
+
+        Label msg = new Label(message);
+        // ラベル自体も前面に
+        msg.toFront();
+        msg.setStyle(
+                "-fx-font-size:24px; -fx-text-fill:white;"
+                        + "-fx-background-color:rgba(0,0,0,0.6);"
+                        + "-fx-padding:10px; -fx-background-radius:5px;");
+
+        // 中央配置バインド
+        msg.layoutXProperty().bind(
+                overlayPane.widthProperty().subtract(msg.widthProperty()).divide(2));
+        msg.layoutYProperty().bind(
+                overlayPane.heightProperty().subtract(msg.heightProperty()).divide(2));
+
+        overlayPane.getChildren().add(msg);
+
+        // フェードイン→ホールド→フェードアウト
+        FadeTransition ftIn = new FadeTransition(Duration.millis(300), msg);
+        ftIn.setFromValue(0);
+        ftIn.setToValue(1);
+
+        PauseTransition hold = new PauseTransition(Duration.seconds(1.4));
+
+        FadeTransition ftOut = new FadeTransition(Duration.millis(300), msg);
+        ftOut.setFromValue(1);
+        ftOut.setToValue(0);
+        ftOut.setOnFinished(e -> overlayPane.getChildren().remove(msg));
+
+        new SequentialTransition(ftIn, hold, ftOut).play();
     }
 
     /**
