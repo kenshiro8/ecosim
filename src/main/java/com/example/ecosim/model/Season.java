@@ -1,10 +1,10 @@
 package com.example.ecosim.model;
 
 public enum Season {
-    SPRING(19.5, 4.5),
-    SUMMER(28, 4),
-    AUTUMN(14, 4),
-    WINTER(8, 3); // SPRING と WINTER の差を自然に、5℃未満に調整
+    SPRING(16, 2),   // 14〜18℃
+    SUMMER(28, 4),   // 24〜32℃
+    AUTUMN(13, 3),   // 10〜16℃
+    WINTER(5, 2);    // 3〜7℃
 
     private final double averageTemperature;
     private final double temperatureVariance;
